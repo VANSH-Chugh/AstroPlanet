@@ -2,8 +2,14 @@
 <html>
 <head>
     <title>Astro Generator</title>
+
+    <!-- Premium Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
 
 <div class="container">
@@ -13,18 +19,34 @@
         <input type="text" id="name" placeholder="Name" required>
         <input type="text" id="dob" placeholder="DD/MM/YYYY" required>
         <input type="text" id="time" placeholder="HH:MM" required>
-        <input type="number" step="any" id="lat" placeholder="Latitude" required>
-        <input type="number" step="any" id="lon" placeholder="Longitude" required>
 
-        <button type="submit">Generate JSON</button>
+        <!-- Latitude / Longitude -->
+        <input type="number" step="any" id="lat" placeholder="Latitude (e.g. 26.9124)" required>
+        <input type="number" step="any" id="lon" placeholder="Longitude (e.g. 75.7873)" required>
+
+        <button type="submit" id="submitBtn">Generate</button>
     </form>
 
-    <a id="downloadLink" style="display:none;">Download JSON</a>
+    <!-- Loader -->
+    <div id="loader" style="display:none;">⏳ Generating your chart...</div>
+
+    <!-- Download Button -->
+    <button id="downloadBtn" style="display:none;">Download JSON</button>
 </div>
 
 <script>
+let generatedBlob = null;
+
 document.getElementById("astroForm").addEventListener("submit", async function(e) {
     e.preventDefault();
+
+    const submitBtn = document.getElementById("submitBtn");
+    const loader = document.getElementById("loader");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    submitBtn.disabled = true;
+    loader.style.display = "block";
+    downloadBtn.style.display = "none";
 
     const data = {
         name: document.getElementById("name").value,
@@ -34,20 +56,37 @@ document.getElementById("astroForm").addEventListener("submit", async function(e
         lon: parseFloat(document.getElementById("lon").value)
     };
 
-    const response = await fetch("/generate", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-    });
+    try {
+        const response = await fetch("/generate", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
+        generatedBlob = await response.blob();
 
-    const link = document.getElementById("downloadLink");
-    link.href = url;
-    link.download = `${data.name}_planetary_data.json`;
-    link.style.display = "block";
-    link.innerText = "Download JSON";
+        loader.style.display = "none";
+        downloadBtn.style.display = "block";
+        submitBtn.disabled = false;
+
+    } catch (error) {
+        loader.innerText = "❌ Error generating chart";
+        submitBtn.disabled = false;
+    }
+});
+
+// Download + reload
+document.getElementById("downloadBtn").addEventListener("click", function() {
+    const url = window.URL.createObjectURL(generatedBlob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "planetary_data.json";
+    a.click();
+
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
 });
 </script>
 
