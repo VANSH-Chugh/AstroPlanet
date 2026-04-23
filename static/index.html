@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Astro Generator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Astrology Chart Generator</h2>
+
+    <form id="astroForm">
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="text" id="dob" placeholder="DD/MM/YYYY" required>
+        <input type="text" id="time" placeholder="HH:MM" required>
+        <input type="number" step="any" id="lat" placeholder="Latitude" required>
+        <input type="number" step="any" id="lon" placeholder="Longitude" required>
+
+        <button type="submit">Generate JSON</button>
+    </form>
+
+    <a id="downloadLink" style="display:none;">Download JSON</a>
+</div>
+
+<script>
+document.getElementById("astroForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const data = {
+        name: document.getElementById("name").value,
+        dob: document.getElementById("dob").value,
+        time: document.getElementById("time").value,
+        lat: parseFloat(document.getElementById("lat").value),
+        lon: parseFloat(document.getElementById("lon").value)
+    };
+
+    const response = await fetch("/generate", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.getElementById("downloadLink");
+    link.href = url;
+    link.download = `${data.name}_planetary_data.json`;
+    link.style.display = "block";
+    link.innerText = "Download JSON";
+});
+</script>
+
+</body>
+</html>
