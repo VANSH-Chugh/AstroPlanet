@@ -6,12 +6,19 @@ body {
     padding: 0;
 }
 
+/* Top button */
+.top-bar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 16px;
+}
+
 /* Container */
 .container {
     width: 90%;
     max-width: 360px;
-    margin: 100px auto;
-    padding: 30px;
+    margin: 40px auto; /* reduced from 100px */
+    padding: 24px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
     backdrop-filter: blur(10px);
@@ -24,20 +31,26 @@ h2 {
     margin-bottom: 20px;
     font-weight: 600;
     letter-spacing: 0.5px;
+    font-size: 18px;
 }
 
 /* Inputs */
 input {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     margin: 10px 0;
     border-radius: 10px;
     border: none;
     background: rgba(255, 255, 255, 0.08);
     color: white;
-    font-size: 14px;
+    font-size: 16px; /* better for mobile */
     outline: none;
     transition: all 0.3s ease;
+}
+
+/* Prevent zoom on iOS */
+input, button {
+    font-size: 16px;
 }
 
 /* Input focus */
@@ -49,22 +62,24 @@ input:focus {
 /* Buttons */
 button {
     margin-top: 10px;
-    padding: 12px;
+    padding: 14px;
     width: 100%;
     border-radius: 12px;
     border: none;
     background: linear-gradient(135deg, #00c896, #00a3ff);
     color: white;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-/* Hover */
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 200, 150, 0.4);
+/* Hover (only for desktop) */
+@media (hover: hover) {
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 200, 150, 0.4);
+    }
 }
 
 /* Click effect */
@@ -87,15 +102,21 @@ button:disabled {
     animation: pulse 1.2s infinite;
 }
 
-/* Download button */
-#downloadBtn {
-    margin-top: 15px;
-    background: linear-gradient(135deg, #ffaa00, #ff6a00);
-}
-
 /* Animation */
 @keyframes pulse {
     0% { opacity: 0.4; }
     50% { opacity: 1; }
     100% { opacity: 0.4; }
+}
+
+/* 📱 Extra mobile polish */
+@media (max-width: 480px) {
+    .container {
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
 }
