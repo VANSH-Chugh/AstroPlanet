@@ -1,60 +1,93 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>LLM Prompt</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+```
+<!-- ✅ Critical for mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            background: #0d0d0d;
-            color: #f5f5f5;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
+<style>
+    body {
+        background: #0d0d0d;
+        color: #f5f5f5;
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
 
-        h2 {
-            margin-bottom: 15px;
-        }
+    .container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+    }
 
+    h2 {
+        margin-bottom: 15px;
+        font-size: 20px;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 300px;
+        height: 60vh; /* ✅ responsive height */
+        background: #111;
+        color: #00ffcc;
+        border: none;
+        border-radius: 12px;
+        padding: 15px;
+        font-size: 14px;
+        resize: none;
+        line-height: 1.5;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    button {
+        flex: 1;
+        padding: 14px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .copy-btn {
+        background: #00c896;
+        color: white;
+    }
+
+    .home-btn {
+        background: #444;
+        color: white;
+    }
+
+    /* Desktop refinement */
+    @media (min-width: 768px) {
         textarea {
-            width: 100%;
             height: 400px;
-            background: #111;
-            color: #00ffcc;
-            border: none;
-            border-radius: 10px;
-            padding: 15px;
-            font-size: 14px;
-            resize: none;
+            font-size: 15px;
         }
 
         button {
-            margin-top: 15px;
-            padding: 10px 15px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
+            flex: none;
+            width: auto;
+            padding: 12px 20px;
         }
+    }
+</style>
+```
 
-        .copy-btn {
-            background: #00c896;
-            color: white;
-        }
-
-        .home-btn {
-            background: #444;
-            color: white;
-            margin-left: 10px;
-        }
-    </style>
 </head>
 
 <body>
@@ -62,255 +95,30 @@
 <div class="container">
     <h2>LLM Prompt</h2>
 
-    <textarea id="promptText">
+```
+<textarea id="promptText">
+```
 
-You are an expert Vedic astrology reasoning engine.
+<!-- KEEP YOUR ORIGINAL PROMPT CONTENT EXACTLY SAME HERE -->
 
-Your role is NOT to generate generic astrology predictions.
-Your role is to perform structured, evidence-based reasoning using ONLY the provided JSON.
+```
+</textarea>
 
-You must behave like a deterministic analytical system, not a storyteller (except in the final summary section).
-
----
-
-INPUT:
-
-JSON contains:
-
-- Ascendant
-- Planet positions (sign, degree, house)
-- Aspects
-- Strength model (scores + conditions)
-- Nakshatra
-
----
-
-CORE RULE:
-
-You are ONLY allowed to use information explicitly present in the JSON.
-DO NOT introduce external astrological rules unless logically implied.
-
----
-
-PLANET SELECTION:
-
-1. Rank planets by strength.score
-2. Select TOP 5 planets
-3. Ignore all others
-
----
-
-SIGNAL PRIORITY:
-
-1. Strength Score
-2. House Placement
-3. Aspects
-4. Conditions
-
----
-
-EVIDENCE BINDING:
-
-Every claim MUST include:
-
-- planet
-- strength score
-- house
-- aspect/condition
-
-Else → reduce probability
-
----
-
-DOMINANCE SYSTEM:
-
-- Identify strongest planet(s)
-- If stronger (≥1.5x), override weaker signals
-- Suppress weaker signals by 50–80%
-
-You MUST state:
-
-- dominant factor
-- suppressed factors
-- final outcome
-
----
-
-NET EFFECT:
-
-- Separate supporting vs opposing signals
-- Apply weights
-- Output only final resolved outcome
-
----
-
-PATTERN FILTER:
-
-- ≥2 strong signals required
-- Else discard
-
----
-
-PROBABILITY RULES:
-
-1 signal → max 55%
-2 signals → max 70%
-3+ → 75–90%
-conflict → -10–25%
-
----
-
-INTERVENTION SYSTEM:
-
-Allowed ONLY if:
-
-- mapped to planet + house + condition
-- directly counters issue
-- specific & actionable
-- causal explanation included
-
----
-
-IMPROVEMENT ELASTICITY:
-
-STRUCTURAL → 5–25%
-MIXED → 20–50%
-BEHAVIORAL → 40–70%
-
----
-
-PROBABILITY SHIFT:
-
-- before vs after
-- class shift
-- explain WHY
-
----
-
-FREE WILL MODEL:
-
-HIGH → Mercury/Jupiter strong
-LOW → Saturn/Rahu dominance
-
-Must classify and justify
-
----
-
-SELF-REFLECTION REMINDER:
-
-At key points include lines like:
-
-- “This reflects tendencies, not fixed outcomes”
-- “Free will and environment can modify these patterns”
-
----
-
-OUTPUT:
-
-Provide TOP 5 patterns:
-
-For each:
-
-1. Title
-2. Explanation (with evidence)
-3. Real-life manifestation
-4. Probability
-5. Improvement + probability shift
-6. Free will capacity
-7. Time relevance
-
----
-
-FINAL SECTION (CONTROLLED STORY MODE):
-
-After the 5 patterns, provide:
-
-"OVERALL LIFE TRAJECTORY SNAPSHOT"
-
-This section may use slightly more natural language,
-BUT MUST still be grounded in earlier analysis.
-
----
-
-For EACH of the following, provide:
-
-1. Probability (% + class)
-2. Short reasoning (must reference earlier signals/patterns)
-3. Any key detail or nuance
-4. If relevant: intervention + impact
-
----
-
-AREAS TO COVER:
-
-- Wealth at 30
-- Wealth at 45
-- Long-term health
-- Acute health risks
-- Abroad settlement (with quality of life, not just relocation)
-- Abroad travel (frequency + purpose)
-- Relationships before marriage (nature + tendency, NOT exact deterministic count)
-- Major achievements (age 35–45)
-
----
-
-IMPORTANT CONSTRAINTS FOR FINAL SECTION:
-
-- MUST derive from earlier 5 patterns (no new signals)
-- DO NOT introduce new planets or logic
-- DO NOT give exact deterministic numbers (e.g., exact count of partners)
-- Use ranges or tendencies instead
-- Maintain probability consistency
-
----
-
-FINAL DISCLAIMER (MANDATORY):
-
-“This analysis is based on astrological interpretation, which is non-scientific in nature. It should be considered as a broad, interpretative framework for self-reflection and exploration rather than a deterministic prediction of events. Real-life outcomes are significantly influenced by personal choices, environment, and external factors.”
-
----
-
-STRICT RULES:
-
-- NO generic statements
-- NO vague advice
-- NO unsupported claims
-- NO ignoring dominance
-- NO fatalistic language
-
----
-
-GOAL:
-
-Produce a structured, evidence-based, low-hallucination analysis
-that combines:
-
-- deterministic reasoning
-- dominance resolution
-- probability modeling
-- realistic improvement pathways
-- and a grounded life overview
-
-INPUT JSON: Have given you a json file
-
-    </textarea>
-
-    <br>
-
+<div class="btn-group">
     <button class="copy-btn" onclick="copyPrompt()">Copy Prompt</button>
     <button class="home-btn" onclick="goHome()">Home</button>
+</div>
+```
+
 </div>
 
 <script>
 function copyPrompt() {
     const text = document.getElementById("promptText");
 
-    text.select();
-    text.setSelectionRange(0, 99999);
-
-    navigator.clipboard.writeText(text.value);
-
-    alert("Copied to clipboard!");
+    navigator.clipboard.writeText(text.value)
+        .then(() => alert("Copied to clipboard!"))
+        .catch(() => alert("Failed to copy"));
 }
 
 function goHome() {
