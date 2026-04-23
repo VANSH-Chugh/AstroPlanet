@@ -18,6 +18,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def serve_home():
     return FileResponse("static/index.html")
 
+@app.get("/prompt")
+def serve_prompt():
+    return FileResponse("static/prompt.html")   
+
 class BirthInput(BaseModel):
     name: str
     dob: str

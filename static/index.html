@@ -3,14 +3,17 @@
 <head>
     <title>Astro Generator</title>
 
-    <!-- Premium Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css?v=3">
 </head>
 
 <body>
+
+    <div style="text-align:right; margin-bottom:10px;">
+    <a href="/prompt">
+        <button style="width:auto; padding:8px 14px;">Prompt</button>
+    </a>
+</div>
 
 <div class="container">
     <h2>Astrology Chart Generator - Vansh</h2>
@@ -20,33 +23,24 @@
         <input type="text" id="dob" placeholder="DD/MM/YYYY" required>
         <input type="text" id="time" placeholder="HH:MM" required>
 
-        <!-- Latitude / Longitude -->
         <input type="number" step="any" id="lat" placeholder="Latitude (e.g. 26.9124)" required>
         <input type="number" step="any" id="lon" placeholder="Longitude (e.g. 75.7873)" required>
 
         <button type="submit" id="submitBtn">Generate</button>
     </form>
 
-    <!-- Loader -->
     <div id="loader" style="display:none;">⏳ Generating your chart...</div>
-
-    <!-- Download Button -->
-    <button id="downloadBtn" style="display:none;">Download JSON</button>
 </div>
 
 <script>
-let generatedBlob = null;
-
 document.getElementById("astroForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const submitBtn = document.getElementById("submitBtn");
     const loader = document.getElementById("loader");
-    const downloadBtn = document.getElementById("downloadBtn");
 
     submitBtn.disabled = true;
     loader.style.display = "block";
-    downloadBtn.style.display = "none";
 
     const data = {
         name: document.getElementById("name").value,
@@ -63,30 +57,34 @@ document.getElementById("astroForm").addEventListener("submit", async function(e
             body: JSON.stringify(data)
         });
 
-        generatedBlob = await response.blob();
+        // 🔥 Extract filename from backend header
+        const disposition = response.headers.get("Content-Disposition");
+
+        let filename = "planetary_data.json";
+
+        if (disposition && disposition.includes("filename=")) {
+            filename = disposition.split("filename=")[1].replace(/"/g, "");
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;  // ✅ dynamic filename applied
+        a.click();
 
         loader.style.display = "none";
-        downloadBtn.style.display = "block";
         submitBtn.disabled = false;
+
+        setTimeout(() => {
+            location.reload();
+        }, 1000);
 
     } catch (error) {
         loader.innerText = "❌ Error generating chart";
         submitBtn.disabled = false;
     }
-});
-
-// Download + reload
-document.getElementById("downloadBtn").addEventListener("click", function() {
-    const url = window.URL.createObjectURL(generatedBlob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "planetary_data.json";
-    a.click();
-
-    setTimeout(() => {
-        location.reload();
-    }, 1000);
 });
 </script>
 

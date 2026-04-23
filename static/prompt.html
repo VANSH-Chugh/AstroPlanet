@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM Prompt</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: #0d0d0d;
+            color: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 400px;
+            background: #111;
+            color: #00ffcc;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 14px;
+            resize: none;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background: #00c896;
+            color: white;
+        }
+
+        .home-btn {
+            background: #444;
+            color: white;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>LLM Prompt</h2>
+
+    <textarea id="promptText">
+
+You are an expert Vedic astrology reasoning engine.
+
+Your job is NOT to give generic astrology predictions.
+Your job is to analyze structured astrological signals and infer the most probable life patterns.
+
+INPUT:
+You will be given a JSON containing:
+- Ascendant
+- Planet positions (sign, degree, house)
+- Aspects (planet interactions)
+- Strength model (scores + conditions)
+- Nakshatra
+
+---------------------------------------
+
+INSTRUCTIONS:
+
+1. You MUST use a weighted reasoning approach:
+   - Planet strength score (primary signal)
+   - House placement (context modifier)
+   - Aspects (interaction layer)
+   - Sign dignity (own, friendly, enemy)
+   - Kendra/trine/dusthana influence
+
+2. Resolve conflicts:
+   - If multiple signals disagree, reduce probability accordingly
+   - Do NOT ignore weaker signals — adjust outcome instead
+
+3. Focus ONLY on the strongest patterns in the chart.
+   Ignore weak/noise signals.
+
+4. Output ONLY the TOP 5 most likely life patterns across ANY domain:
+   (career, personality, finance, relationships, mental patterns, lifestyle, etc.)
+
+---------------------------------------
+
+OUTPUT FORMAT (STRICT):
+
+For each of the 5 predictions:
+
+1. Title:
+   Short, clear statement of the pattern
+
+2. Explanation:
+   - WHY this is indicated
+   - Which planets / houses / aspects contribute
+   - How signals combine
+
+3. How it plays out in real life:
+   - Concrete real-world manifestation
+   - Situational examples
+
+4. Probability:
+   - Give a % (0–100)
+   - Also classify as:
+     LOW (0–40)
+     MEDIUM (40–65)
+     HIGH (65–80)
+     VERY HIGH (80–100)
+
+5. Actionable advice (ONLY if applicable):
+   - Suggest improvement based on chart signals
+   - If negative tendency exists, explain how to reduce it
+   - Mention how probability can improve (e.g. HIGH → MEDIUM risk)
+
+6. Time relevance (if applicable):
+   - When this pattern is likely to matter most
+   - (early life / mid life / later / recurring)
+
+---------------------------------------
+
+RULES:
+
+- NO generic astrology statements
+- NO vague phrases like "you may feel"
+- Every statement must be backed by chart signals
+- Use structured reasoning, not intuition
+- Be precise and analytical
+
+---------------------------------------
+
+INPUT JSON: Have given you a json file
+
+    </textarea>
+
+    <br>
+
+    <button class="copy-btn" onclick="copyPrompt()">Copy Prompt</button>
+    <button class="home-btn" onclick="goHome()">Home</button>
+</div>
+
+<script>
+function copyPrompt() {
+    const text = document.getElementById("promptText");
+
+    text.select();
+    text.setSelectionRange(0, 99999);
+
+    navigator.clipboard.writeText(text.value);
+
+    alert("Copied to clipboard!");
+}
+
+function goHome() {
+    window.location.href = "/";
+}
+</script>
+
+</body>
+</html>
