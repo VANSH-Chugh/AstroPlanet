@@ -7,6 +7,7 @@ body {
 }
 
 /* Top button */
+/* */
 .top-bar {
     display: flex;
     justify-content: flex-end;
